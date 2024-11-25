@@ -6,7 +6,7 @@ from io import BytesIO
 def procesar_datos(content):
     # Regex para cada campo
     regex_serie = re.compile(r'\b\d{6}\b')  # 6 dígitos para el número de serie
-    regex_correo = re.compile(r'\S+@\S+\.\w+')  # Correo electrónico
+    regex_correo = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')  # Correo electrónico válido
     regex_nombre = re.compile(r'[A-Z][a-z]+\s[A-Z][a-z]+')  # Nombre completo
     regex_telefono = re.compile(r'\+57\s?\d{10}')  # Número de teléfono
     regex_fecha = re.compile(r'\b\d{2}/\d{2}/\d{2}\b')  # Fecha en formato DD/MM/YY
