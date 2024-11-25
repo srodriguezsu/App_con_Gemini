@@ -3,13 +3,12 @@ import re
 import pandas as pd
 from io import BytesIO
 
-
-def to_excel(dataframe):
+def to_csv(dataframe):
     output = BytesIO()
-    with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        dataframe.to_excel(writer, index=False, sheet_name="Productos")
-        processed_data = output.getvalue()
-        return processed_data
+    dataframe.to_csv(output, index=False, encoding="utf-8")
+    processed_data = output.getvalue().decode("utf-8")  # Decode bytes to string
+    return processed_data
+
 
 
 def procesar_datos(content):
@@ -77,7 +76,7 @@ if uploaded_file:
 
         #Convertir a Excel
 
-        excel_data = to_excel(df)
+        excel_data = to_csv(df)
 
         # Botón de descarga
         st.download_button(
