@@ -3,6 +3,15 @@ import re
 import pandas as pd
 from io import BytesIO
 
+
+def to_excel(dataframe):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        dataframe.to_excel(writer, index=False, sheet_name="Productos")
+        processed_data = output.getvalue()
+        return processed_data
+
+
 def procesar_datos(content):
     # Regex para cada campo
     regex_serie = re.compile(r'\b\d{6}\b')  # 6 dígitos para el número de serie
@@ -66,22 +75,17 @@ if uploaded_file:
         st.write("Datos procesados:")
         st.dataframe(df)
 
-        # Convertir a Excel
-        # def to_excel(dataframe):
-            # output = BytesIO()
-            # with pd.ExcelWriter(output, engine="openpyxl") as writer:
-            #     dataframe.to_excel(writer, index=False, sheet_name="Productos")
-            # processed_data = output.getvalue()
-            # return processed_data
+        Convertir a Excel
+        
 
-        # excel_data = to_excel(df)
+        excel_data = to_excel(df)
 
-        # # Botón de descarga
-        # st.download_button(
-        #     label="Descargar archivo Excel",
-        #     data=excel_data,
-        #     file_name="productos_procesados.xlsx",
-        #     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        # )
+        # Botón de descarga
+        st.download_button(
+            label="Descargar archivo Excel",
+            data=excel_data,
+            file_name="productos_procesados.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
     else:
         st.error("No se encontraron coincidencias en el archivo. Verifica el formato.")
