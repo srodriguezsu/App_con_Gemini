@@ -75,8 +75,7 @@ if uploaded_file:
         st.write("Datos procesados:")
         st.dataframe(df)
 
-        Convertir a Excel
-        
+        #Convertir a Excel
 
         excel_data = to_excel(df)
 
