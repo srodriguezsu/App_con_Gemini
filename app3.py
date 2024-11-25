@@ -55,7 +55,7 @@ if uploaded_file:
     content = uploaded_file.read().decode("utf-8")
 
     # Extraer los datos
-    data = procesarDatos(content)
+    data = procesar_datos(content)
     if data:
         
         
