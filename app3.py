@@ -55,7 +55,7 @@ if uploaded_file:
         st.dataframe(df)
 
         # Convertir a Excel
-        def to_excel(dataframe):
+        # def to_excel(dataframe):
             # output = BytesIO()
             # with pd.ExcelWriter(output, engine="openpyxl") as writer:
             #     dataframe.to_excel(writer, index=False, sheet_name="Productos")
