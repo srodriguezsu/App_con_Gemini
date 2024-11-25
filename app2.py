@@ -21,7 +21,7 @@ def validar_fecha(fecha):
 
 # Interfaz de usuario
 st.title("Formulario de Validación")
-
+st.write("Desarrollado por: Sebastián Rodríguez Suarez")
 nombre = st.text_input("Nombre:")
 email = st.text_input("Correo electrónico:")
 telefono = st.text_input("Teléfono:")
