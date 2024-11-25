@@ -3,6 +3,41 @@ import re
 import pandas as pd
 from io import BytesIO
 
+def procesar_datos(content):
+    # Regex para cada campo
+    regex_serie = re.compile(r'\b\d{6}\b')  # 6 dígitos para el número de serie
+    regex_correo = re.compile(r'\S+@\S+\.\w+')  # Correo electrónico
+    regex_nombre = re.compile(r'[A-Z][a-z]+\s[A-Z][a-z]+')  # Nombre completo
+    regex_telefono = re.compile(r'\+57\s?\d{10}')  # Número de teléfono
+    regex_fecha = re.compile(r'\b\d{2}/\d{2}/\d{2}\b')  # Fecha en formato DD/MM/YY
+    regex_valor = re.compile(r'\d+\.\d{2}')  # Valor en formato decimal
+    
+    # Lista para almacenar los datos procesados
+    data = []
+
+    # Procesar cada línea del archivo
+    for linea in content.splitlines():
+        # Buscar los campos en la línea
+        serie = regex_serie.search(linea)
+        correo = regex_correo.search(linea)
+        nombre = regex_nombre.findall(linea)  # Puede haber más de un nombre
+        telefono = regex_telefono.search(linea)
+        fecha = regex_fecha.search(linea)
+        valor = regex_valor.search(linea)
+        
+        # Validar y asignar los campos encontrados
+        datos = {
+            "Número de Serie": serie.group() if serie else "",
+            "Nombre del Producto": nombre[1] if len(nombre) > 1 else "",
+            "Valor": float(valor.group()) if valor else 0.0,
+            "Fecha de Compra": fecha.group() if fecha else "",
+            "Contacto (Nombre)": nombre[0] if len(nombre) > 0 else "",
+            "Correo Electrónico": correo.group() if correo else "",
+            "Teléfono": telefono.group() if telefono else "",
+        }
+        data.append(datos)
+    return data
+    
 # Configuración de la app
 st.title("Generador de archivo Excel con regex")
 st.write(
@@ -19,34 +54,11 @@ if uploaded_file:
     # Leer el contenido del archivo
     content = uploaded_file.read().decode("utf-8")
 
-    # Expresión regular para extraer los datos
-    pattern = re.compile(
-        r"(?P<nombre>[A-Z][a-z]+\s[A-Z][a-z]+),"
-        r"(?P<valor>\d+\.\d+),"
-        r"(?P<fecha>\d{2}/\d{2}/\d{2}),"
-        r"(?P<telefono>\+57\s\d+),"
-        r"(?P<correo>\S+@\S+\.\w+),"
-        r"(?P<producto>.+?),"
-        r"(?P<serie>\d+)"
-    )
-
     # Extraer los datos
-    matches = pattern.findall(content)
-    if matches:
-        data = []
-        for match in matches:
-            data.append(
-                {
-                    "Número de Serie": match[6],
-                    "Nombre del Producto": match[5],
-                    "Valor": float(match[1]),
-                    "Fecha de Compra": match[2],
-                    "Contacto (Nombre)": match[0],
-                    "Correo Electrónico": match[4],
-                    "Teléfono": match[3],
-                }
-            )
-
+    data = procesarDatos(content)
+    if data:
+        
+        
         # Crear un DataFrame
         df = pd.DataFrame(data)
 
